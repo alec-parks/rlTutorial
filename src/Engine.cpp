@@ -53,11 +53,33 @@ void Engine::update()
             }
         break;
         case TCODK_KP7 :
-            if (! map->isWall(player->x+1,player->y+1))
+            if (! map->isWall(player->x-1,player->y-1))
             {
               player->x--;
               player->y--;
             }
+        break;
+        case TCODK_KP9 :
+            if (! map->isWall(player->x+1,player->y-1))
+            {
+              player->x++;
+              player->y--;
+            }
+        break;
+        case TCODK_KP1 :
+            if (! map->isWall(player->x-1,player->y+1))
+            {
+              player->x--;
+              player->y++;
+            }
+        break;
+        case TCODK_KP3 :
+            if (! map->isWall(player->x+1,player->y+1))
+            {
+              player->x++;
+              player->y++;
+            }
+        break;
         default: break;
     }
 }
