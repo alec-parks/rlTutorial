@@ -25,30 +25,40 @@ void Engine::update()
     switch(key.vk)
     {
         case TCODK_UP :
+        case TCODK_KP8 :
             if ( ! map->isWall(player->x,player->y-1))
             {
                 player->y--;
             }
         break;
         case TCODK_DOWN :
+        case TCODK_KP2 :
             if ( ! map->isWall(player->x,player->y+1))
             {
                 player->y++;
             }
         break;
         case TCODK_LEFT :
+        case TCODK_KP4 :
             if ( ! map->isWall(player->x-1,player->y))
             {
                 player->x--;
             }
         break;
         case TCODK_RIGHT :
+        case TCODK_KP6 :
             if ( ! map->isWall(player->x+1,player->y))
             {
                 player->x++;
             }
         break;
-        default:break;
+        case TCODK_KP7 :
+            if (! map->isWall(player->x+1,player->y+1))
+            {
+              player->x--;
+              player->y--;
+            }
+        default: break;
     }
 }
 
