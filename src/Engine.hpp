@@ -1,5 +1,15 @@
+#ifndef ENGINE_HPP
+#define ENGINE_HPP
+
 class Engine {
 public:
+  enum GameStatus {
+    STARTUP,
+    IDLE,
+    NEW_TURN,
+    VICTORY,
+    DEFEAT
+  } gameStatus;
   int fovRadius;
   TCODList<Actor *> actors;
   Actor *player;
@@ -14,3 +24,4 @@ private:
 };
 
 extern Engine engine;
+#endif
