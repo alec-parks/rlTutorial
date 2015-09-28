@@ -1,73 +1,27 @@
-#include "libtcod.hpp"
-#include "Actor.hpp"
-#include "Map.hpp"
-#include "Engine.hpp"
+#include "main.hpp"
 
-Engine::Engine() : gameStatus(STARTUP), fovRadius(10), computeFov(true)
-{
-    TCODConsole::initRoot(80,50,"libtcod C++ tutorial",false);
+Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadius(10),
+        computeFov(true),screenWidth(screenWidth),screenHeight(screenHeight){
+    TCODConsole::initRoot(screenWidth,screenHeight,"libtcod C++ tutorial",false);
     player = new Actor(40,25,'@',"player",TCODColor::white);
+    player->destructible=new PlayerDestructible(30,30,2,"your cadaver");
+    player->attacker = new Attacker(5);
+    player->ai = new PlayerAi();
     actors.push(player);
     map = new Map(80,45);
 
 }
 
-Engine::~Engine()
-{
+Engine::~Engine(){
     actors.clearAndDelete();
     delete map;
 }
 
-void Engine::update()
-{
-    TCOD_key_t key;
+void Engine::update(){
     if( gameStatus == STARTUP ) map->computeFov();
     gameStatus=IDLE;
-    TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS,&key,NULL);
-    int dx=0,dy=0;
-    switch(key.vk)
-    {
-        case TCODK_UP   :
-        case TCODK_KP8  :
-            dy=-1;
-        break;
-        case TCODK_DOWN :
-        case TCODK_KP2  :
-            dy=1;
-        break;
-        case TCODK_LEFT :
-        case TCODK_KP4  :
-            dx=-1;
-        break;
-        case TCODK_RIGHT :
-        case TCODK_KP6  :
-            dx=1;
-        break;
-        case TCODK_KP7 :
-            dx=-1;
-            dy=-1;
-        break;
-        case TCODK_KP9 :
-            dx=1;
-            dy=-1;
-        break;
-        case TCODK_KP1 :
-            dx=-1;
-            dy=1;
-        break;
-        case TCODK_KP3 :
-            dx=1;
-            dy=1;
-        break;
-        default: break;
-    }
-    if(dx !=0 || dy !=0){
-      gameStatus=NEW_TURN;
-      if( player -> moveOrAttack(player->x+dx,player->y+dy))
-      {
-        map->computeFov();
-      }
-    }
+    TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS,&lastKey,NULL);
+    player->update();
     if ( gameStatus == NEW_TURN ) {
 	    for (Actor **iterator=actors.begin(); iterator != actors.end();
 	        iterator++) {
@@ -79,19 +33,24 @@ void Engine::update()
 	}
 }
 
-void Engine::render()
-{
+void Engine::render(){
     TCODConsole::root->clear();
     // draw the map
     map->render();
     // draw the actors
     for (Actor **iterator=actors.begin();
-      iterator != actors.end(); iterator++)
-      {
+      iterator != actors.end(); iterator++) {
         Actor *actor=*iterator;
-        if ( map->isInFov(actor->x,actor->y) )
-        {
+		      if ( actor != player && map->isInFov(actor->x,actor->y) ) {
             actor->render();
         }
       }
+    player->render();
+    TCODConsole::root->print(1,screenHeight-2,"HP: %d/%d",
+        (int) player->destructible->hp, (int) player->destructible->maxHp);
+}
+
+void Engine::sendToBack(Actor *actor){
+  actors.remove(actor);
+  actors.insertBefore(actor,0);
 }

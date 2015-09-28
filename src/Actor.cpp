@@ -1,14 +1,11 @@
 #include <stdio.h>
-#include "libtcod.hpp"
-#include "Actor.hpp"
-#include "Map.hpp"
-#include "Engine.hpp"
+#include "main.hpp"
 
 char name[60];
 
 Actor::Actor(int x, int y, int ch, const char *name, const TCODColor &col) :
-    x(x),y(y),ch(ch),col(col),name(name){
-
+    x(x),y(y),ch(ch),name(name), col(col),
+    blocks(true), destructible(NULL),attacker(NULL) ,ai(NULL) {
     }
 
 void Actor::render() const {
@@ -18,7 +15,9 @@ void Actor::render() const {
 
 void Actor::update()
 {
-  printf("The %s growls!\n", name);
+  if( ai ){
+    ai -> update(this);
+  }
 }
 
 bool Actor::moveOrAttack(int x, int y)

@@ -7,6 +7,10 @@ public:
   int x,y; //position
   int ch; //ascii code
   TCODColor col; //color
+  bool blocks; //can you move through this actor
+  Attacker *attacker; //something that deals damage
+  Destructible *destructible; //can it be damaged
+  Ai *ai; //something self updating
 
   Actor (int x, int y, int ch, const char *name, const TCODColor &col);
   void update();
