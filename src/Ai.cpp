@@ -46,6 +46,10 @@ void PlayerAi::update(Actor *owner){
           dx=1;
           dy=1;
       break;
+      case TCODK_KP5 :
+          dx=0;
+          dy=0;
+          engine.gameStatus=Engine::NEW_TURN;
       default: break;
   }
   if(dx !=0 || dy !=0){
@@ -76,8 +80,8 @@ bool PlayerAi::moveOrAttack(Actor *owner, int targetx, int targety){
         printf ("There's a %s here\n",actor->name);
     }
   }
-  owner->x += targetx;
-  owner->y += targety;
+  owner->x = targetx;
+  owner->y = targety;
   return true;
 }
 
@@ -100,7 +104,7 @@ void MonsterAi::moveOrAttack(Actor *owner, int targetx,int targety){
   int dy = targety - owner->y;
   int stepdx = (dx > 0 ? 1 : -1);
   int stepdy = (dy > 0 ? 1 : -1);
-  float distance = sqrtf(dx*dx+dy*dy);
+  float distance = sqrt(dx*dx+dy*dy);
 
   if (distance >= 2){
     dx = (int) (round(dx/distance));
