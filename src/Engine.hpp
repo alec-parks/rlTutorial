@@ -11,13 +11,15 @@ public:
     DEFEAT
   } gameStatus;
   int fovRadius;
-  TCODList<Actor *> actors;
   Actor *player;
   Map *map;
 
   int screenWidth;
   int screenHeight;
+  Gui *gui;
   TCOD_key_t lastKey;
+  TCOD_mouse_t mouse;
+  TCODList<Actor *> actors;
 
   Engine(int screenWidth, int screenHeight);
   ~Engine();

@@ -23,10 +23,8 @@ void Actor::update()
 bool Actor::moveOrAttack(int x, int y)
 {
   if (engine.map->isWall(x,y)) {return false;}
-  for (Actor **iterator=engine.actors.begin();
-      iterator !=engine.actors.end();iterator++)
+  for (auto &actor : engine.actors)
       {
-        Actor *actor = *iterator;
         if(actor->x == x && actor->y == y)
         {
           printf("The %s laughs at your puny attempts to attack him!\n", actor->name);

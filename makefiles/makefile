@@ -27,7 +27,7 @@ src/main.hpp.gch : src/*.hpp
 	g++ src/main.hpp -Iinclude -Wall
 
 src/%.o : src/%.cpp src/main.hpp.gch
-	g++ $< -c -o $@ -Iinclude -Wall $(CFLAGS)
+	g++ $< -c -o $@ -std=c++11 -Iinclude -Wall $(CFLAGS)
 
 clean :
 	rm -f src/main.hpp.gch $(OBJS) $(TARGET)

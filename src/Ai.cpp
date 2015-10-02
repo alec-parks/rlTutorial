@@ -47,8 +47,6 @@ void PlayerAi::update(Actor *owner){
           dy=1;
       break;
       case TCODK_KP5 :
-          dx=0;
-          dy=0;
           engine.gameStatus=Engine::NEW_TURN;
       default: break;
   }
@@ -63,21 +61,17 @@ void PlayerAi::update(Actor *owner){
 bool PlayerAi::moveOrAttack(Actor *owner, int targetx, int targety){
   if (engine.map->isWall(targetx,targety)) {return false;}
 
-  for (Actor **iterator=engine.actors.begin();
-        iterator != engine.actors.end(); iterator++){
-          Actor *actor = *iterator;
-          if(actor->destructible && !actor->destructible->isDead()
-             && actor->x == targetx && actor->y == targety){
-               owner->attacker->attack(owner,actor);
-               return false;
-             }
+    for (auto &actor : engine.actors){
+        if(actor->destructible && !actor->destructible->isDead()
+           && actor->x == targetx && actor->y == targety){
+             owner->attacker->attack(owner,actor);
+             return false;
+        }
   }
-  for (Actor **iterator=engine.actors.begin();
-    iterator != engine.actors.end(); iterator++) {
-    Actor *actor=*iterator;
+  for (auto &actor : engine.actors) {
     if ( actor->destructible && actor->destructible->isDead()
          && actor->x == targetx && actor->y == targety ) {
-        printf ("There's a %s here\n",actor->name);
+        engine.gui->message(TCODColor::lightGrey,"There's a %s here",actor->name);
     }
   }
   owner->x = targetx;
