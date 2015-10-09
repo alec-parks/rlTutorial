@@ -47,7 +47,10 @@ void PlayerAi::update(Actor *owner){
           dy=1;
       break;
       case TCODK_KP5 :
+      	  handleActionKey(owner,'g');
           engine.gameStatus=Engine::NEW_TURN;
+      break;
+      case TCODK_CHAR : handleActionKey(owner, engine.lastKey.c); break;
       default: break;
   }
   if(dx !=0 || dy !=0){
@@ -69,7 +72,9 @@ bool PlayerAi::moveOrAttack(Actor *owner, int targetx, int targety){
         }
   }
   for (auto &actor : engine.actors) {
-    if ( actor->destructible && actor->destructible->isDead()
+    bool corpseOrItem=(actor->destructible && actor->destructible->isDead ||
+		    actor->pickable);
+    if ( corpseOrItem 
          && actor->x == targetx && actor->y == targety ) {
         engine.gui->message(TCODColor::lightGrey,"There's a %s here",actor->name);
     }
@@ -77,6 +82,32 @@ bool PlayerAi::moveOrAttack(Actor *owner, int targetx, int targety){
   owner->x = targetx;
   owner->y = targety;
   return true;
+}
+
+void PlayerAi::handleActionKey(Actor *owner, int ascii ){
+  switch(ascii){
+    case 'g' : //pick up item
+      {
+        bool found=false;
+	for ( auto &actor : engine.actors){
+	  if (actor->pickable && actor->x == owner->x && actor->y == owner->y){
+	    if (actor->pickable->pick(actor,owner)){
+	      found=true;
+	      engine.gui->message(TCODColor::lightGrey, "You pick the %s.",
+			      actor->name);
+	      engine.gameStatus=Engine::NEW_TURN;
+	      break;
+	    } else if (! found){
+	      found=true;
+	      engine.gui->message(TCODColor::red,"Your inventory is full.");
+	    }
+	  }
+	}
+      }
+  }
+  if(!found) {
+    engine.gui->message(TCODColor::lightGrey,"There's nothing here that you can pick up.");
+  }
 }
 
 void MonsterAi::update(Actor *owner){
