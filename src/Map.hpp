@@ -2,8 +2,8 @@
 #define MAP_HPP
 
 struct Tile {
-    bool explored; //has player explored this tile?
-    Tile() : explored(false) {}
+  bool explored; //has player explored this tile?
+  Tile() : explored(false) {}
 };
 
 class Map {
@@ -17,15 +17,16 @@ public :
   bool isExplored(int x, int y) const;
   bool canWalk(int x, int y) const;
   void computeFov();
- 	void render() const;
+  void render() const;
   void addMonster(int x, int y);
+  void addItem(int x, int y);
 protected :
-    Tile *tiles;
-    TCODMap *map;
-    friend class BspListener;
+  Tile *tiles;
+  TCODMap *map;
+  friend class BspListener;
 
-    void dig(int x1, int y1, int x2, int y2);
-    void createRoom(bool first, int x1, int y1, int x2, int y2);
+  void dig(int x1, int y1, int x2, int y2);
+  void createRoom(bool first, int x1, int y1, int x2, int y2);
 };
 
 #endif

@@ -1,12 +1,14 @@
 #include "main.hpp"
 
-Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), fovRadius(10),
-        computeFov(true),screenWidth(screenWidth),screenHeight(screenHeight){
+Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), 
+	fovRadius(10), computeFov(true),screenWidth(screenWidth),
+	screenHeight(screenHeight){
     TCODConsole::initRoot(screenWidth,screenHeight,"libtcod C++ tutorial",false);
     player = new Actor(40,25,'@',"player",TCODColor::white);
     player->destructible=new PlayerDestructible(30,30,2,"your cadaver");
     player->attacker = new Attacker(5);
     player->ai = new PlayerAi();
+    player->container = new Container(26);
     actors.push(player);
     map = new Map(80,45);
     gui = new Gui();
@@ -24,7 +26,8 @@ Engine::~Engine(){
 void Engine::update(){
     if( gameStatus == STARTUP ) map->computeFov();
     gameStatus=IDLE;
-    TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS||TCOD_EVENT_MOUSE,&lastKey,&mouse);
+    TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS||TCOD_EVENT_MOUSE,&lastKey,
+		    &mouse);
     player->update();
     if ( gameStatus == NEW_TURN ) {
 	    for (auto &actor : actors) {

@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include "main.hpp"
 
-Destructible::Destructible(float maxHp,float hp, float defense, const char *corpseName):
-      maxHp(maxHp),hp(hp),defense(defense),corpseName(corpseName){
+Destructible::Destructible(float maxHp,float hp, float defense, 
+		const char *corpseName): maxHp(maxHp),hp(hp),defense(defense),
+	corpseName(corpseName){
 }
 
 float Destructible::takeDamage(Actor *owner, float damage){
@@ -18,6 +19,15 @@ float Destructible::takeDamage(Actor *owner, float damage){
   return damage;
 }
 
+float Destructible::heal(float amount){
+  hp += amount;
+  if (hp > maxHp){
+    amount -= hp-maxHp;
+    hp=maxHp;
+  }
+  return amount;
+}
+
 void Destructible::die(Actor *owner){
   owner ->ch='%';
   owner->col = TCODColor::darkRed;
@@ -26,7 +36,8 @@ void Destructible::die(Actor *owner){
   engine.sendToBack(owner);
 }
 
-MonsterDestructible::MonsterDestructible(float maxHp, float hp, float defense, const char *corpseName) :
+MonsterDestructible::MonsterDestructible(float maxHp, float hp, float defense, 
+		const char *corpseName) :
     Destructible(maxHp,hp,defense,corpseName) {
 }
 
@@ -35,7 +46,8 @@ void MonsterDestructible::die(Actor *owner){
   Destructible::die(owner);
 }
 
-PlayerDestructible::PlayerDestructible(float maxHp,float hp, float defense, const char *corpseName) :
+PlayerDestructible::PlayerDestructible(float maxHp,float hp, float defense, 
+		const char *corpseName) :
     Destructible(maxHp,hp,defense,corpseName) {
 }
 
