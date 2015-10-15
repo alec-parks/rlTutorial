@@ -24,7 +24,7 @@ bool Healer::use(Actor *owner, Actor *wearer){
 	if ( wearer->destructible ){
 		float amountHealed= wearer->destructible->heal(amount);
 		if( amountHealed > 0 ){
-			return Picable::use(owner,wearer);
+			return Pickable::use(owner,wearer);
 		}
 	}
 	return false;

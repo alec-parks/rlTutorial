@@ -6,7 +6,7 @@ class Actor;
 #include "Destructible.hpp"
 #include "Attacker.hpp"
 #include "Ai.hpp"
-#include "Pikcable.hpp"
+#include "Pickable.hpp"
 #include "Container.hpp"
 #include "Actor.hpp"
 #include "Map.hpp"

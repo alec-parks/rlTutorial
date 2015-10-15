@@ -100,16 +100,16 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2)
           }
           nbMonsters--;
         }
-    }
-    // add items
-    int nbItems=rng->getInt(0,MAX_ROOM_ITEMS);
-    while (nbItems > 0){
-      int x=rng->getInt(x1,x2);
-      int y=rng->getInt(y1,y2);
-      if ( canWalk(x,y) ){
-        addItem(x,y);
-      }
-      nbItems--;
+        // add items
+    	int nbItems=rng->getInt(0,MAX_ROOM_ITEMS);
+    	while (nbItems > 0){
+      	  int x=rng->getInt(x1,x2);
+      	  int y=rng->getInt(y1,y2);
+      	  if ( canWalk(x,y) ){
+            addItem(x,y);
+      	  }
+          nbItems--;
+        }
     }
 }
 
