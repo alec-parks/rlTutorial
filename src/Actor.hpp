@@ -19,6 +19,7 @@ public:
   void update();
   bool moveOrAttack(int x, int y);
   void render() const;
+  float getDistance(int cx, int cy) const;
 };
 
 #endif

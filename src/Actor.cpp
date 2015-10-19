@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include "main.hpp"
 
 char name[60];
@@ -43,4 +44,10 @@ bool Actor::moveOrAttack(int x, int y)
     this->x = x;
     this->y = y;
     return true;
+}
+
+float Actor::getDistance(int cx, int cy) const{
+  int dx=x-cx;
+  int dy=y-cy;
+  return sqrtf(dx*dx+dy*dy);
 }

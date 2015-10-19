@@ -26,6 +26,7 @@ public:
   void update();
   void render();
   void sendToBack(Actor *actor);
+  Actor *getClosestMonseter(int x, int y, float range) const;
 private:
   bool computeFov;
 };
