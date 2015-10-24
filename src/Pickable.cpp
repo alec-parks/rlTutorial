@@ -48,3 +48,30 @@ bool LightningBolt::use(Actor *owner, Actor *wearer){
   closestMonster->destructible->takeDamage(closestMonster,damage);
   return Pickable::use(owner,wearer);
 }
+
+Fireball::Fireball(float range, float damage) : 
+	LightningBolt(range, damage){
+}
+
+bool Fireball::use(Actor *owner, Actor *wearer) {
+  engine.gui->message(TCODColor::cyan, 
+	"Left-click a target tile for the fireball,\nor right-click to cancel.");
+  int x,y;
+  if (! engine.pickATile(&x,&y)){
+    return false;
+  }
+
+  engine.gui->message(TCODColor::orange,
+	"The fireball explodes, burning everything with %g tiles!",range);
+  for (Actor **iterator=engine.actors.begin();
+	iterator != engines.actor.end(); iterator++){
+    Actor *actor=*iterator;
+    if (actor->destructible && !actor->destructible->isDead()
+	&& actor->getDistance(x,y) <= range){
+      engine.gui->message(TCODColor::orange,
+		      "The %s gets burned for %g",actor->name,damge);
+      actor->destructible->takeDamage(actor,damage);
+    }
+  }
+  return Pickable::use(owner,wearer);
+}
