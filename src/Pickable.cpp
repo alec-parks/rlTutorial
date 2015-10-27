@@ -17,6 +17,17 @@ bool Pickable::use(Actor *owner, Actor *wearer){
 	return false;
 }
 
+void Pickable::drop(Actor *owner, Actor *wearer) {
+  if (wearer->container) {
+    wearer->container->remove(owner);
+    engine.actors.push(owner);
+    owner->x=wearer->x;
+    owner->y=wearer->y;
+    engine.gui->message(TCODColor::lightGrey,"%s drops a %s.",
+		    wearer->name,owner->name);
+  }
+}
+
 Healer::Healer(float amount): amount(amount){
 }
 
