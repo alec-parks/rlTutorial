@@ -108,3 +108,15 @@ Actor *Engine::getClosestMonster(int x, int y, float range) const {
   }
   return closest;
 }
+
+Actor *Engine::getActor(int x, int y) const{
+  for(Actor **iterator = actors.begin();
+	iterator != actors.end(); iterator++ ){
+    Actor *actor=*iterator;
+    if(actor->x == x && actor->y == y && actor->PlayerDestructible &&
+	  !actor->destructible->isDead()){
+      return actor;
+    }
+  }
+  return NULL;
+}
