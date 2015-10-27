@@ -64,14 +64,18 @@ void PlayerAi::update(Actor *owner){
 bool PlayerAi::moveOrAttack(Actor *owner, int targetx, int targety){
   if (engine.map->isWall(targetx,targety)) {return false;}
 
-    for (auto &actor : engine.actors){
+    for (Actor **iterator=engine.actors.begin();
+	    iterator != engine.actors.end(); iterator++){
+	Actor *actor = *iterator;
         if(actor->destructible && !actor->destructible->isDead()
            && actor->x == targetx && actor->y == targety){
              owner->attacker->attack(owner,actor);
              return false;
         }
   }
-  for (auto &actor : engine.actors) {
+  for (Actor **iterator=engine.actors.begin();
+	  iterator != engine.actors.end(); iterator++){
+    Actor *actor = *iterator;
     bool corpseOrItem=(actor->destructible && actor->destructible->isDead() ||
 		    actor->pickable);
     if ( corpseOrItem 
@@ -89,7 +93,9 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii ){
     case 'g' : //pick up item
       {
         bool found=false;
-	for ( auto &actor : engine.actors){
+	for ( Actor **iterator = engine.actors.begin();
+		iterator < engine.actors.end(); iterator++){
+	  Actor *actor=*iterator;
 	  if (actor->pickable && actor->x == owner->x && actor->y == owner->y){
 	    if (actor->pickable->pick(actor,owner)){
 	      found=true;
@@ -137,7 +143,9 @@ Actor *PlayerAi::choseFromInventory(Actor *owner){
   con.setDefaultForeground(TCODColor::white);
   int shortcut='a';
   int y=1;
-  for(auto &actor : owner->container->inventory){
+  for(Actor **iterator=owner->container->inventory.begin();
+	  iterator != owner->container->inventory.end(); iterator++){
+    Actor *actor = *iterator;
     con.print(2,y,"(%c) %s", shortcut, actor->name);
     y++;
     shortcut++;
