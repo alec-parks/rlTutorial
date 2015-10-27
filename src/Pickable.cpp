@@ -41,7 +41,7 @@ bool LightningBolt::use(Actor *owner, Actor *wearer){
     return false;
   }
   // hit closest monster for <damage>
-  engine.gui->mesage(TCODColor::lightBlue,
+  engine.gui->message(TCODColor::lightBlue,
 		  "A lightningbolt strikes the %s with a loud thunder!\n"
 		  "The damage is %g hit points.",
 		  closestMonster->name,damage);
@@ -64,12 +64,12 @@ bool Fireball::use(Actor *owner, Actor *wearer) {
   engine.gui->message(TCODColor::orange,
 	"The fireball explodes, burning everything with %g tiles!",range);
   for (Actor **iterator=engine.actors.begin();
-	iterator != engines.actor.end(); iterator++){
+	iterator != engine.actors.end(); iterator++){
     Actor *actor=*iterator;
     if (actor->destructible && !actor->destructible->isDead()
 	&& actor->getDistance(x,y) <= range){
       engine.gui->message(TCODColor::orange,
-		      "The %s gets burned for %g",actor->name,damge);
+		      "The %s gets burned for %g",actor->name,damage);
       actor->destructible->takeDamage(actor,damage);
     }
   }

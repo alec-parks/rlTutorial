@@ -90,11 +90,13 @@ bool Engine::pickATile(int *x, int *y, float maxRange){
     return false;
 }
 
-Actor *Engine::getClosestMonster(int x, int y, float range) const{
+Actor *Engine::getClosestMonster(int x, int y, float range) const {
   Actor *closest = NULL;
   float bestDistance=1E6f;
 
-  for(auto &actor : actors){
+  for(Actor **iterator = actors.begin();
+       iterator != actors.end(); iterator++){
+    Actor *actor=*iterator;
     if ( actor != player && actor->destructible 
 	 && !actor->destructible->isDead() ){
       float distance=actor->getDistance(x,y);
@@ -104,4 +106,5 @@ Actor *Engine::getClosestMonster(int x, int y, float range) const{
       }
     }
   }
+  return closest;
 }
