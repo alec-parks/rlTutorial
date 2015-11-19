@@ -5,7 +5,33 @@
 static const int TRACKING_TURNS=3;
 
 MonsterAi::MonsterAi() : moveCount(0){
+}
 
+void MonsterAi::load(TCODZip &zip){
+  moveCount=zip.getInt();
+}
+
+void MonsterAi::save(TCODZip &zip){
+  zip.putInt(MONSTER);
+  zip.putInt(moveCount);
+}
+
+void ConfusedMonsterAi::load(TCODZip &zip){
+  nbTurns = zip.getInt();
+  oldAi=Ai::create(zip);
+}
+
+void ConfusedMonsterAi::save(TCODZip &zip){
+  zip.putInt(CONFUSED_MONSTER);
+  zip.putInt(nbTurns);
+  oldAi->save(zip);
+}
+
+void PlayerAi::load(TCODZip &zip){
+}
+
+void PlayerAi::save(TCODZip &zip){
+  zip.putInt(PLAYER);
 }
 
 void PlayerAi::update(Actor *owner){
@@ -116,7 +142,7 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii ){
     break;
     case 'i' : //open inventory
       {
-        Actor *actor=choseFromInventory(owner);
+        Actor *actor=chooseFromInventory(owner);
 	if (actor) {
 	  actor->pickable->use(actor,owner);
 	  engine.gameStatus=Engine::NEW_TURN;
@@ -135,7 +161,7 @@ void PlayerAi::handleActionKey(Actor *owner, int ascii ){
   }
 }
 
-Actor *PlayerAi::choseFromInventory(Actor *owner){
+Actor *PlayerAi::chooseFromInventory(Actor *owner){
   static const int INVENTORY_WIDTH=50;
   static const int INVENTORY_HEIGHT=28;
   static TCODConsole con(INVENTORY_WIDTH,INVENTORY_HEIGHT);
@@ -230,4 +256,16 @@ void ConfusedMonsterAi::update(Actor *owner) {
     owner->ai = oldAi;
     delete this;
   }
+}
+
+Ai *Ai::create(TCODZip &zip){
+  AiType type = (AiType) zip.getInt();
+  Ai *ai = NULL;
+  switch(type) {
+    case PLAYER : ai = new PlayerAi(); break;
+    case MONSTER : ai = new MonsterAi(); break;
+    case CONFUSED_MONSTER : ai = new ConfusedMonsterAi(0,NULL); break;
+  }
+  ai->load(zip);
+  return ai;
 }

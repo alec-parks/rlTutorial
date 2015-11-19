@@ -115,3 +115,21 @@ void Gui::renderMouseLook(){
     con->setDefaultForeground(TCODColor::lightGrey);
     con->print(1,0,buf);
 }
+
+void Gui::save(TCODZip &zip) {
+  zip.putInt(log.size());
+  for(Message **iterator=log.begin(); iterator != log.end(); iterator++) {
+    zip.putString((*iterator)->text);
+    zip.putColor(&(*iterator)->col);
+  }
+}
+
+void Gui::load(TCODZip &zip) {
+  int nbMessages=zip.getInt();
+  while (nbMessages>0){
+    const char *text=zip.getString();
+    TCODColor col = zip.getColor();
+    message(col,text);
+    nbMessages--;
+  }
+}

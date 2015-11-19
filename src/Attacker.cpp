@@ -22,3 +22,9 @@ void Attacker::attack(Actor *owner, Actor *target){
               owner->name , target->name);
   }
 }
+void Attacker::save(TCODZip &zip) {
+  zip.putFloat(power);
+}
+void Attacker::load(TCODZip &zip) {
+  power=zip.getFloat();
+}

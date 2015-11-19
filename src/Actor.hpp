@@ -1,7 +1,7 @@
 #ifndef ACTOR_HPP
 #define ACTOR_HPP
 
-class Actor {
+class Actor : public Persistent {
 public:
   const char *name; //Actors name
   int x,y; //position
@@ -20,6 +20,8 @@ public:
   bool moveOrAttack(int x, int y);
   void render() const;
   float getDistance(int cx, int cy) const;
+  void load(TCODZip &zip);
+  void save(TCODZip &zip);
 };
 
 #endif

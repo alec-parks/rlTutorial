@@ -1,19 +1,10 @@
 #include "main.hpp"
 
 Engine::Engine(int screenWidth, int screenHeight) : gameStatus(STARTUP), 
-	fovRadius(10), computeFov(true),screenWidth(screenWidth),
-	screenHeight(screenHeight){
+	player(NULL),map(NULL),fovRadius(10), computeFov(true),
+	screenWidth(screenWidth),screenHeight(screenHeight){
     TCODConsole::initRoot(screenWidth,screenHeight,"libtcod C++ tutorial",false);
-    player = new Actor(40,25,'@',"player",TCODColor::white);
-    player->destructible=new PlayerDestructible(30,30,2,"your cadaver");
-    player->attacker = new Attacker(5);
-    player->ai = new PlayerAi();
-    player->container = new Container(26);
-    actors.push(player);
-    map = new Map(80,45);
     gui = new Gui();
-    
-    gui->message(TCODColor::red,"Welcome, Stranger!\nPrepare to perish!");
 
 }
 
@@ -21,6 +12,18 @@ Engine::~Engine(){
     actors.clearAndDelete();
     delete map;
     delete gui;
+}
+
+void Engine::init(){
+  player = new Actor(40,25,'@',"player",TCODColor::white);
+  player->destructible = new PlayerDestructible(30,30,2,"your cadaver");
+  player->attacker = new Attacker(5);
+  player->ai = new PlayerAi();
+  player->container = new Container(26);
+  actors.push(player);
+  map = new Map(80,43);
+  map->init(true);
+  gui->message(TCODColor::red,"Welcome, Stranger!\nPrepare to perish!");
 }
 
 void Engine::update(){
@@ -113,7 +116,7 @@ Actor *Engine::getActor(int x, int y) const{
   for(Actor **iterator = actors.begin();
 	iterator != actors.end(); iterator++ ){
     Actor *actor=*iterator;
-    if(actor->x == x && actor->y == y && actor->PlayerDestructible &&
+    if(actor->x == x && actor->y == y && actor->destructible &&
 	  !actor->destructible->isDead()){
       return actor;
     }

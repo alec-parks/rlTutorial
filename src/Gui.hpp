@@ -1,12 +1,14 @@
 #ifndef GUI_HPP
 #define	GUI_HPP
 
-class Gui{
+class Gui : public Persistent{
 public:
     Gui();
     ~Gui();
     void render();
     void message(const TCODColor &col, const char *text, ...);
+    void load(TCODZip &zip);
+    void save(TCODZip &zip);
     
 protected:
     TCODConsole *con;

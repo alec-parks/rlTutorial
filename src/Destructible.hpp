@@ -1,7 +1,7 @@
 #ifndef DESTRUCTIBLE_HPP
 #define DESTRUCTIBLE_HPP
 
-class Destructible{
+class Destructible : public Persistent {
 public:
   float maxHp;
   float hp;
@@ -13,8 +13,16 @@ public:
 
   float takeDamage(Actor *owner, float damage);
   float heal(float amount);
+  void load(TCODZip &zip);
+  void save(TCODZip &zip);
+  static Destructible *create(TCODZip &zip);
 
   virtual void die(Actor *owner);
+
+protected:
+  enum DestructibleType {
+    MONSTER,PLAYER
+  };
 };
 
 class MonsterDestructible : public Destructible {
